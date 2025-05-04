@@ -1,5 +1,7 @@
 package com.example.milktea.pages
 
+import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +25,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -34,6 +37,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -51,11 +55,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -63,6 +69,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.milktea.R
 import com.example.milktea.component.HomeMenu
+import com.example.milktea.ui.theme.Main
+import com.example.milktea.ui.theme.MainColorMilk
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,12 +81,12 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold (
-        containerColor = Color.White,
+        containerColor = Main,
         topBar ={
-            SearchBar()
+            SearchBar(navController = navController)
         },
         bottomBar = {
-            HomeMenu()
+            HomeMenu(navController = navController, currentpage = "home")
         },
         content = {
             innerPadding->
@@ -113,6 +121,7 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
                                     coroutineScope.launch {
                                         pagerState.animateScrollToPage(index)
                                     }
+                                    navController.navigate(route = "category_page/${categoryList[index]}")
                                 },
                                 colors = CardDefaults.cardColors(
                                     containerColor = Color.Transparent
@@ -132,7 +141,7 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
                                         modifier = Modifier
                                             .size(50.dp)
                                             .background(
-                                                Color.Gray,
+                                                MainColorMilk,
                                                 shape = RoundedCornerShape(30.dp)
                                             )
                                             .padding(10.dp)
@@ -155,9 +164,11 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
                             fontWeight = FontWeight.Bold,
                             color = Color.Black, fontSize = 25.sp)
                         TextButton(
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(route = "popular_drinks_page")
+                            }
                         ) {
-                            Text("See all")
+                            Text("See all", color = Color.Black)
                         }
                     }
                     Row (
@@ -171,7 +182,7 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
                     }
 
                     //
-                    // POPULAR DRINK
+                    // PREVIOUS DRINK
                     Row (
                         modifier = Modifier
                             .fillMaxWidth()
@@ -183,12 +194,14 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
                             fontWeight = FontWeight.Bold,
                             color = Color.Black, fontSize = 25.sp)
                         TextButton(
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(route = "recent_page")
+                            }
                         ) {
-                            Text("See all")
+                            Text("See all", color = Color.Black)
                         }
                     }
-                    PreviousTeaBox("Brown Sugar Boba", 100, 4.8, 30)
+                    PreviousTeaBox("Brown Sugar Boba", 100, 4.8, 30, navController)
 
 
                 }
@@ -198,59 +211,80 @@ fun Homepage(modifier: Modifier = Modifier, navController: NavController) {
 }
 
 @Composable
-private fun SearchBar(modifier: Modifier = Modifier) {
+private fun SearchBar(modifier: Modifier = Modifier, navController: NavController) {
 
-    var search by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
 
     Row (
-        modifier = Modifier
+        modifier = Modifier.fillMaxWidth()
             .padding(10.dp, 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
 
     ){
-        Text("MilkTea",
+        Text("" +
+                "TeaHouse",
             fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace,
             color = Color.Black, fontSize = 30.sp, modifier = Modifier.padding(horizontal = 10.dp))
-
-        TextField(
-            value = search,
-            onValueChange = { search = it },
-            modifier = modifier
-                .fillMaxWidth(fraction = 0.80f),
-            placeholder = {
-                Text(
-                    text = "Search ",
-                    color = Color.Gray
-                )
-            },
-            shape = RoundedCornerShape(16.dp),
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search Icon",
-                )
-            },
-            textStyle = TextStyle(
-                fontSize = 20.sp,    // Font size
-                lineHeight = 20.sp   // Control spacing inside
-            ),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
-
-        )
-        IconButton(
-            onClick = {
-
-            },
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth(fraction = 1f)
-                .padding(2.dp)
+                .height(55.dp)
         ) {
+            AnimatedVisibility(visible = expanded) {
+                TextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    modifier = Modifier
+                        .width(130.dp),
+                    placeholder = { Text("Search...") },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MainColorMilk,
+                        unfocusedContainerColor = MainColorMilk,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedPlaceholderColor = Color.Gray,
+                        unfocusedPlaceholderColor = Color.Gray,
+                        disabledPlaceholderColor = Color.Gray,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        disabledTextColor = Color.Black,
+                        cursorColor = Color.Black
+                    ),
+                    shape = RoundedCornerShape(50)
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .height(55.dp)
+            ){
+                IconButton(
+                    onClick = { expanded = !expanded },
+                    modifier = Modifier
+                        .size(25.dp)
+                ) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.Close else Icons.Default.Search,
+                        contentDescription = "Search",
+                        modifier = Modifier
+                            .size(40.dp)
+                    )
+                }
+            }
+            IconButton(
+                    onClick = {
+                        navController.navigate(route = "notification_page")
+                    },
+            modifier = Modifier
+                .width(40.dp)
+                .padding(2.dp)
+            ) {
             Icon(
                 imageVector = Icons.Default.Notifications,
                 contentDescription = "Menu Button",
@@ -259,6 +293,10 @@ private fun SearchBar(modifier: Modifier = Modifier) {
 
             )
         }
+
+
+        }
+
     }
 }
 
@@ -282,7 +320,7 @@ private fun CategoryBtn(name : String, pagerState: PagerState, categories: List<
 }
 
 @Composable
-private fun TeaBox(name: String, price: Int, rating: Double, customerNumbers: Int, navController: NavController) {
+fun TeaBox(name: String, price: Int, rating: Double, customerNumbers: Int, navController: NavController) {
 
     val full_price = price.toString()
     val string_rating = rating.toString()
@@ -293,6 +331,12 @@ private fun TeaBox(name: String, price: Int, rating: Double, customerNumbers: In
             .height(230.dp)
             .padding(10.dp)
             .width(142.dp),
+        colors = CardColors(
+            containerColor = MainColorMilk, contentColor = Color.Black,
+            disabledContainerColor = MainColorMilk,
+            disabledContentColor = Color.Black
+        ),
+
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         onClick = { navController.navigate(route = "tea_page")
         }
@@ -354,13 +398,16 @@ private fun TeaBox(name: String, price: Int, rating: Double, customerNumbers: In
 }
 
 @Composable
-private fun PreviousTeaBox(name: String, price: Int, rating: Double, customerNumbers: Int) {
+private fun PreviousTeaBox(name: String, price: Int, rating: Double, customerNumbers: Int , navController: NavController) {
 
     val full_price = price.toString()
     val string_rating = rating.toString()
     val string_customerNumbers = customerNumbers.toString()
 
     Card(
+        onClick = {
+            navController.navigate(route = "tea_page")
+        },
         modifier = Modifier
             .height(100.dp)
             .padding(horizontal = 25.dp)
@@ -377,6 +424,7 @@ private fun PreviousTeaBox(name: String, price: Int, rating: Double, customerNum
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(MainColorMilk)
                     .padding(10.dp),
                 horizontalAlignment = Alignment.Start
             ){
@@ -388,11 +436,15 @@ private fun PreviousTeaBox(name: String, price: Int, rating: Double, customerNum
                     lineHeight = 30.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.width(200.dp)
+                    modifier = Modifier.width(200.dp),
+                    color = Color.Black
+
+
                 )
                 Text(
                     text = "⭐$string_rating ($string_customerNumbers)",
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    color = Color.Black
 
                 )
                 Row (
@@ -404,7 +456,8 @@ private fun PreviousTeaBox(name: String, price: Int, rating: Double, customerNum
                     Text(
                         text = "₱$full_price",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        color = Color.Black
 
                     )
                     IconButton(

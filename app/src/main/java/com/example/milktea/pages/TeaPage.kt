@@ -1,5 +1,6 @@
 package com.example.milktea.pages
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,9 +26,13 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -51,17 +57,22 @@ import androidx.navigation.NavController
 import com.example.milktea.R
 import com.example.milktea.component.HomeMenu
 import com.example.milktea.component.TopBarHeader
+import com.example.milktea.ui.theme.ColorBtn
+import com.example.milktea.ui.theme.Main
+import com.example.milktea.ui.theme.MainColorMilk
 
 @Composable
 fun TeaPage(modifier: Modifier = Modifier, navController: NavController) {
 
     val scrollState = rememberScrollState()
+
     Scaffold (
+        containerColor = Color.LightGray,
         topBar = {
             TopBarHeader(name = "Drink Details", navController = navController)
         },
         bottomBar = {
-            ButtonCart()
+            ButtonCart(navController = navController)
         },
         content = {
                 innerPadding->
@@ -72,6 +83,7 @@ fun TeaPage(modifier: Modifier = Modifier, navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(scrollState)
+                        .background(color = Main)
                 ) {
                     TeaCard()
                     SizeButtons()
@@ -94,8 +106,12 @@ fun TeaCard(modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.fillMaxWidth()
-            .background(Color.Gray)
-            .height(400.dp),
+            .height(375.dp),
+        colors = CardColors(
+            containerColor = MainColorMilk, contentColor = Color.Black,
+            disabledContainerColor = MainColorMilk,
+            disabledContentColor = Color.Black
+        ),
         content = {
             Column{
                 Image(
@@ -106,6 +122,7 @@ fun TeaCard(modifier: Modifier = Modifier) {
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth()
+
                         .padding(horizontal = 20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -177,15 +194,15 @@ fun SizeButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(100.dp)
                     .background(
-                        color = if (selectedSize == "Small") Color.Gray else Color.Transparent,
+                        color = if (selectedSize == "Small") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Small",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedSize == "Small") Color.White else Color.Gray
+                        color = if (selectedSize == "Small") Color.Black else Color.Black
                     )
                 }
             )
@@ -196,15 +213,15 @@ fun SizeButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(100.dp)
                     .background(
-                        color = if (selectedSize == "Medium") Color.Gray else Color.Transparent,
+                        color = if (selectedSize == "Medium") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Medium",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedSize == "Medium") Color.White else Color.Gray
+                        color = if (selectedSize == "Medium") Color.Black else Color.Black
                     )
                 }
             )
@@ -215,15 +232,16 @@ fun SizeButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(100.dp)
                     .background(
-                        color = if (selectedSize == "Large") Color.Gray else Color.Transparent,
+                        color = if (selectedSize == "Large") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Large",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedSize == "Large") Color.White else Color.Gray)
+                        color = if (selectedSize == "Large") Color.Black else Color.Black
+                    )
                 }
             )
 
@@ -257,15 +275,15 @@ fun IceLevelButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedLevel == "No Ice") Color.Gray else Color.Transparent,
+                        color = if (selectedLevel == "No Ice") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("No ice",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color =  if (selectedLevel == "No Ice") Color.White else Color.Gray)
+                        color =  Color.Black)
                 }
             )
             TextButton(
@@ -275,15 +293,15 @@ fun IceLevelButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedLevel == "Less") Color.Gray else Color.Transparent,
+                        color = if (selectedLevel == "Less") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Less",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color =  if (selectedLevel == "Less") Color.White else Color.Gray
+                        color = Color.Black
                     )
                 }
             )
@@ -294,15 +312,15 @@ fun IceLevelButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedLevel == "Regular") Color.Gray else Color.Transparent,
+                        color = if (selectedLevel == "Regular") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Regular",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color =  if (selectedLevel == "Regular") Color.White else Color.Gray)
+                        color =  Color.Black)
                 }
             )
             TextButton(
@@ -312,15 +330,15 @@ fun IceLevelButtons(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedLevel == "Extra") Color.Gray else Color.Transparent,
+                        color = if (selectedLevel == "Extra") ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("Extra",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color =  if (selectedLevel == "Extra") Color.White else Color.Gray)
+                        color =  Color.Black)
                 }
             )
 
@@ -354,15 +372,15 @@ fun SugarLevel(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedIndex == 0) Color.Gray else Color.Transparent,
+                        color = if (selectedIndex == 0) ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("0%",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedIndex == 0)Color.White else Color.Gray)
+                        color = Color.Black)
                 }
             )
             TextButton(
@@ -372,15 +390,15 @@ fun SugarLevel(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedIndex == 50) Color.Gray else Color.Transparent,
+                        color = if (selectedIndex == 50) ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("50%",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedIndex == 50) Color.White else Color.Gray
+                        color = Color.Black
                     )
                 }
             )
@@ -391,15 +409,15 @@ fun SugarLevel(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedIndex == 75) Color.Gray else Color.Transparent,
+                        color = if (selectedIndex == 75) ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("75%",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedIndex == 75) Color.White  else Color.Gray)
+                        color = Color.Black)
                 }
             )
             TextButton(
@@ -409,15 +427,15 @@ fun SugarLevel(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .width(70.dp)
                     .background(
-                        color = if (selectedIndex == 100) Color.Gray else Color.Transparent,
+                        color = if (selectedIndex == 100) ColorBtn else Color.Transparent,
                         shape = RoundedCornerShape(10.dp)
                     )
-                    .border(2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp)),
+                    .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
                 content = {
                     Text("100%",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = if (selectedIndex == 100) Color.White else Color.Gray)
+                        color = Color.Black)
                 }
             )
 
@@ -429,14 +447,14 @@ fun SugarLevel(modifier: Modifier = Modifier) {
 fun Toppings(modifier: Modifier = Modifier) {
     var checked_boba by remember { mutableStateOf(false) }
     var checked_pudding by remember { mutableStateOf(false) }
-    var checked_jelly by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
+            .height(200.dp)
             .padding(horizontal = 20.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.SpaceBetween
+
     ){
         Text("Toppings",
             fontSize = 20.sp,
@@ -446,150 +464,124 @@ fun Toppings(modifier: Modifier = Modifier) {
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
+                    .background(color = if (checked_boba) MainColorMilk else Color.Transparent)
+                    .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 10.dp, vertical = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                 Text(
-                    "Extra Boba"
+                    "Extra Boba", fontWeight = if(checked_boba) FontWeight.Bold else FontWeight.Normal
                 )
                 Row (
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Text(
-                        "+ ₱100"
+                        "+ ₱100", fontWeight = if(checked_boba) FontWeight.Bold else FontWeight.Normal
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Checkbox(
                         checked = checked_boba,
-                        onCheckedChange = { checked_boba = it }
+                        onCheckedChange = { checked_boba = it },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = ColorBtn, // color when checked
+                            uncheckedColor = Color.Black, // color when unchecked
+                            checkmarkColor = Color.Black, // optional: color of the checkmark
+                            disabledCheckedColor = ColorBtn, // color when disabled & checked
+                            disabledUncheckedColor = Color.Gray // optional: disabled & unchecked
+                        )
                     )
                 }
             }
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
+                .background(color = if (checked_pudding) MainColorMilk else Color.Transparent)
+                .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp))
                 .padding(horizontal = 10.dp, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                "Pudding"
+                "Pudding", fontWeight = if(checked_pudding) FontWeight.Bold else FontWeight.Normal
             )
             Row (
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(
-                    "+ ₱100"
+                    "+ ₱100", fontWeight = if(checked_pudding) FontWeight.Bold else FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Checkbox(
                     checked = checked_pudding,
-                    onCheckedChange = { checked_pudding = it }
+                    onCheckedChange = { checked_pudding = it },
+                    colors = CheckboxDefaults.colors(
+                    checkedColor = ColorBtn, // color when checked
+                    uncheckedColor = Color.Black, // color when unchecked
+                    checkmarkColor = Color.Black, // optional: color of the checkmark
+                    disabledCheckedColor = ColorBtn, // color when disabled & checked
+                    disabledUncheckedColor = Color.Gray // optional: disabled & unchecked
+                )
                 )
             }
         }
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(10.dp))
-                .padding(horizontal = 10.dp, vertical = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                "Grass Jelly"
-            )
-            Row (
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    "+ ₱100"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Checkbox(
-                    checked = checked_jelly,
-                    onCheckedChange = { checked_jelly = it }
-                )
-            }
-        }
-
-
     }
 
 }
 
 @Composable
-fun ButtonCart(modifier: Modifier = Modifier) {
+fun ButtonCart(modifier: Modifier = Modifier, navController: NavController) {
     var count by remember { mutableStateOf(0) }
 
 
     Row (
         modifier = Modifier
             .fillMaxWidth()
+            .background(color = MainColorMilk)
             .padding(horizontal = 20.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
             Text("Total Price")
             Text("₱0.00")
         }
         Row(
-            modifier = Modifier.width(190.dp),
+            modifier = Modifier.width(140.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
             content = {
-                TextButton(
-                    onClick = {
-                        if (count > 0) count--
+                Row(
+                    modifier = Modifier.width(120.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    OutlinedButton(
+                        onClick = { if(count > 0) count-- },
+                        contentPadding = PaddingValues(1.dp),
+                        modifier = Modifier.size(35.dp),
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent, ),
+                        border = BorderStroke(1.dp, Color.Black)
+                    ) {
+                        Text("-", fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 25.sp)
+                    }
+                    Text(count.toString(), fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                    OutlinedButton(
+                        onClick = { count++ },
+                        contentPadding = PaddingValues(1.dp),
+                        modifier = Modifier.size(35.dp),
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent, ),
+                        border = BorderStroke(1.dp, Color.Black)
 
-                    },
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier
-                        .width(30.dp)
-                        .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
-                    content = {
-                        Text("-",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black)
+                    ) {
+                        Text("+", fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 25.sp)
                     }
-                )
-                TextButton(
-                    onClick = {
-                    },
-                    modifier = Modifier
-                        .width(30.dp)
-                        .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
-                    content = {
-                        Text(count.toString(),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black)
-                    }
-                )
-                TextButton(
-                    onClick = {
-                        count++
-                    },
-                    modifier = Modifier
-                        .width(30.dp)
-                        .border(2.dp, color = Color.Black, shape = RoundedCornerShape(10.dp)),
-                    content = {
-                        Text("+",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black)
-                    }
-                )
-
+                }
             }
         )
         TextButton(
             onClick = {
-
+                navController.navigate(route = "cart_page")
             },
             modifier = Modifier
                 .width(100.dp)

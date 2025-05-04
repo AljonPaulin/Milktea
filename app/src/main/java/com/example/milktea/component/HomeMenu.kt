@@ -24,13 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.milktea.ui.theme.MainColorMilk
 
 @Composable
-fun HomeMenu(modifier: Modifier = Modifier) {
+fun HomeMenu(modifier: Modifier = Modifier, navController: NavController, currentpage: String) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.Yellow)
+            .background(color = MainColorMilk)
             .padding(horizontal = 10.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
@@ -38,46 +40,52 @@ fun HomeMenu(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = "home")
+                },
                 modifier = Modifier.height(25.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Menu",
                     modifier = Modifier.size(30.dp),
-                    tint = Color.Black,
+                    tint = if(currentpage == "home") Color.Black else Color.Gray,
                 )
             }
-            Text("Home", fontWeight = FontWeight.Bold, color = Color.Black)
+            Text("Home", fontWeight = FontWeight.Bold, color = if(currentpage == "home") Color.Black else Color.Gray)
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = "favorite_page")
+                },
                 modifier = Modifier.height(25.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Menu",
                     modifier = Modifier.size(30.dp),
-                    tint = Color.Gray
+                    tint = if(currentpage == "favorite") Color.Black else Color.Gray
                 )
             }
-            Text("Favorites", fontWeight = FontWeight.Bold, color = Color.Gray)
+            Text("Favorites", fontWeight = FontWeight.Bold, color = if(currentpage == "favorite") Color.Black else Color.Gray)
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = "cart_page")
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
                     contentDescription = "Menu",
                     modifier = Modifier
                         .size(50.dp)
-                        .background(Color.Gray, shape = RoundedCornerShape(30.dp))
+                        .background(if(currentpage == "cart") Color.Black else Color.Gray, shape = RoundedCornerShape(30.dp))
                         .padding(10.dp),
                     tint = Color.White
 
@@ -88,33 +96,37 @@ fun HomeMenu(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = "setting_page")
+                },
                 modifier = Modifier.height(25.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Menu",
                     modifier = Modifier.size(30.dp),
-                    tint = Color.Gray
+                    tint = if(currentpage == "setting") Color.Black else Color.Gray
                 )
             }
-            Text("Settings", fontWeight = FontWeight.Bold, color = Color.Gray)
+            Text("Settings", fontWeight = FontWeight.Bold, color = if(currentpage == "setting") Color.Black else Color.Gray)
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = "profile_page")
+                },
                 modifier = Modifier.height(25.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Menu",
                     modifier = Modifier.size(30.dp),
-                    tint = Color.Gray
+                    tint = if(currentpage == "profile") Color.Black else Color.Gray
                 )
             }
-            Text("Profile", fontWeight = FontWeight.Bold, color = Color.Gray)
+            Text("Profile", fontWeight = FontWeight.Bold, color = if(currentpage == "profile") Color.Black else Color.Gray)
         }
 
 

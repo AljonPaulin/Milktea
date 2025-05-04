@@ -16,13 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.milktea.ui.theme.MainColorMilk
 
 @Composable
 fun TopBarHeader(modifier: Modifier = Modifier, name: String, navController: NavController) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
-            .background(Color.Gray)
+            .background(MainColorMilk)
     ){
         IconButton(
             onClick = {
@@ -37,7 +38,7 @@ fun TopBarHeader(modifier: Modifier = Modifier, name: String, navController: Nav
             )
         }
         Text(
-            "Drink Details",
+            text = name,
             fontSize = 20.sp,
         )
     }
